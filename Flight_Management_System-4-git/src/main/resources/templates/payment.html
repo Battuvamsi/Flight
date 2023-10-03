@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Payment Page</title>
+    <link rel="website icon" type="png" href="https://th.bing.com/th/id/OIP.XNl__t4pbd-z1mdVzyXvQAHaGl?w=179&h=180&c=7&r=0&o=5&pid=1.7">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <style>
+        body {
+            background: linear-gradient(to right, rgba(235, 224, 232, 1) 52%, rgba(254, 191, 1, 1) 53%, rgba(254, 191, 1, 1) 100%);
+            font-family: 'Roboto', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .payment-container {
+            background-color: #1a56afd9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .payment-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: rgba(254, 191, 1, 1);
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payment-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .payment-form input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .payment-form input::placeholder {
+            color: #999;
+        }
+
+        .payment-form button {
+            padding: 12px 20px;
+            background-color: rgba(254, 191, 1, 1);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .secure-badge {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .secure-badge img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .secure-badge p {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .visa-logo {
+            position: absolute;
+            top: -80px;
+            right: 0px;
+            width: 64px;
+            height: 60px;
+        }
+
+        /* Credit card animation styles */
+
+        .card {
+            position: relative;
+            width: 508px;
+            height: 314px;
+            transform-style: preserve-3d;
+            perspective: 500px;
+            z-index: 2;
+            margin-top: 40px;
+            
+        }
+
+        .card .face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 15px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(28px);
+            transform-style: preserve-3d;
+            transition: 1s;
+            backface-visibility: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover .face.front {
+            transform: rotateY(180deg);
+        }
+
+        .card .face.back {
+            transform: rotateY(180deg);
+        }
+
+        .card:hover .face.back {
+            transform: rotateY(360deg);
+        }
+
+        .card .face.front::before {
+            content: '';
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .card .face.front::after {
+            content: '';
+            position: absolute;
+            bottom: 40px;
+            right: 80px;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .card .face.front .debit {
+            position: absolute;
+            left: 40px;
+            top: 30px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .card .face.front .bank {
+            position: absolute;
+            right: 40px;
+            top: 25px;
+            color: #fff;
+            font-weight: 500;
+            font-style: italic;
+            font-size: 24px;
+        }
+
+        .card .face.front .chip {
+            position: absolute;
+            top: 80px;
+            left: 50px;
+            max-width: 64px;
+        }
+
+        .card .face.front .number {
+            position: absolute;
+            bottom: 130px;
+            left: 40px;
+            color: #fff;
+            font-weight: 500;
+            letter-spacing: 6px;
+            font-size: 18px;
+            text-shadow: 0 2px 1px #0005;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .card .face.front .name {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: #fff;
+            font-weight: 300;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .card .face.front .expiry {
+            position: absolute;
+            bottom: 90px;
+            left: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: 300;
+            line-height: 1em;
+            text-align: right;
+        }
+
+        .card .face.front .expiry span:last-child {
+            margin-left: 20px;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .card .face.back .blackbar {
+            position: absolute;
+            top: 40px;
+            width: 100%;
+            height: 60px;
+            background: #000;
+        }
+
+        .card .face.back .cvvtext {
+            position: absolute;
+            top: 120px;
+            left: 30px;
+        }
+
+        .card .face.back .cvvtext .white-bar {
+            position: relative;
+            width: 400px;
+            height: 40px;
+            background: #fff;
+            margin-top: 5px;
+        }
+
+        .card .face.back .cvvtext .cvv {
+            position: relative;
+            top: +13%;
+            left: 345px;
+            background: #ccc;
+            color: #111;
+            width: 50px;
+            height: 30px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card .face.back .text {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            color: #fff;
+            font-size: 10px;
+            line-height: 1. 4em;
+            font-weight: 300;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+
+        .visa-div img {
+            padding-top: 20px;
+            height: 120px;
+            width: 80%;
+            margin-left: 90px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="payment-container">
+        <h1>Secure Payment</h1>
+        <br>
+        <div id="passengerNameDisplay"></div>
+        <br>
+        <form class="payment-form" id="paymentForm" action="/payment" method="POST">
+            <img class="visa-logo" src="https://img.icons8.com/color/48/000000/visa.png" width="64px" height="60px" />
+            <label for="Name">Name On Card:</label>
+            <input type="text" id="Name" name="Name" placeholder="name" required>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="**** **** **** 1234" required>
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" placeholder="123" required>
+            <label for="otp">OTP:</label>
+            <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+            
+            
+            <button type="button" id="generateOTPButton">Generate OTP</button>
+            <br>
+            <br>
+
+            <!-- Include the CSRF token -->
+            <meta name="_csrf" th:content="${_csrf.token}">
+            <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+            <button type="submit">Pay Now 300/-</button>
+        </form>
+
+        <div class="secure-badge">
+            <img src="https://th.bing.com/th/id/OIP.Zxo9VA1JPnJ8oiJEuV7wgQHaHa?pid=ImgDet&w=196&h=196&c=7" alt="Secure">
+            <p>Your payment is secured with our partner.</p>
+        </div>
+    </div>
+
+    <!-- Credit card animation -->
+    <div class="card">
+        <div class="face front">
+            <img class="chip" src="https://clipground.com/images/credit-card-chip-clipart-2.png" alt="chip">
+            <div class="visa-div">
+                <img src="https://pngteam.com/images/visa-logo-png-659x202_f88f44ff_transparent.png" alt="VISA Logo">
+            </div>
+            <span class="number">0000 0000 0000 0000</span>
+            <span class="name">Name On Card</span>
+            <span class="expiry">MM/YY</span>
+        </div>
+        <div class="face back">
+            <div class="blackbar"></div>
+            <div class="cvvtext">
+                <div class="white-bar">
+                    <span class="cvv">123</span>
+                </div>
+            </div>
+            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam bibendum, libero eu tincidunt lobortis, diam ipsum consequat tellus, a blandit orci lectus vel mauris. Vestibulum convallis tempor neque, eu varius ipsum vulputate ac.</div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add the JavaScript code for credit card animation -->
+<script>
+    const cardNumberInput = document.getElementById("cardNumber");
+    const cardHolderInput = document.getElementById("Name");
+    const expiryDateInput = document.getElementById("expiryDate");
+    const cvvInput = document.getElementById("cvv");
+
+    cardNumberInput.addEventListener("input", updateCardNumber);
+    cardHolderInput.addEventListener("input", updateCardHolder);
+    expiryDateInput.addEventListener("input", updateExpiryDate);
+    cvvInput.addEventListener("input", updateCvv);
+
+    function updateCardNumber() {
+        const cardNumber = cardNumberInput.value;
+        const cardNumberElement = document.querySelector(".card .face .number");
+        cardNumberElement.textContent = formatCardNumber(cardNumber);
+    }
+
+    function updateCardHolder() {
+        const cardHolder = cardHolderInput.value.toUpperCase();
+        const cardHolderElement = document.querySelector(".card .face .name");
+        cardHolderElement.textContent = cardHolder;
+    }
+
+    function updateExpiryDate() {
+        const expiryDate = expiryDateInput.value;
+        const expiryElement = document.querySelector(".card .face .expiry");
+        expiryElement.textContent = expiryDate;
+    }
+
+    function updateCvv() {
+        const cvv = cvvInput.value;
+        const cvvElement = document.querySelector(".card .face .cvv");
+        cvvElement.textContent = cvv;
+    }
+
+    function formatCardNumber(cardNumber) {
+        const formattedNumber = cardNumber.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
+        return formattedNumber;
+    }
+    
+    
+    
+    
+    
+ // Function to generate a mock OTP
+    function generateMockOTP() {
+        // Generates a random 6-digit mock OTP
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    // Function to generate a new mock OTP and display it
+    function generateAndDisplayOTP() {
+        const newMockOTP = generateMockOTP();
+        console.log("New Mock OTP:", newMockOTP);
+        alert("Your OTP is: " + newMockOTP);
+        return newMockOTP;
+    }
+
+    // Add event listener to the "Generate OTP" button
+    document.getElementById("generateOTPButton").addEventListener("click", function() {
+        // Generate a new OTP and store it for later comparison during form submission
+        const generatedOTP = generateAndDisplayOTP();
+
+        // Store the generated OTP in a data attribute for later comparison during form submission
+        document.getElementById("paymentForm").setAttribute("data-generated-otp", generatedOTP);
+    });
+    
+    
+
+    document.getElementById("paymentForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Get the CSRF token from the meta tags
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        // Get the payment form data
+        const formData = new FormData(event.target);
+        const enteredOTP = formData.get("otp");
+        const generatedOTP = document.getElementById("paymentForm").getAttribute("data-generated-otp");
+        
+        // Retrieve the passengerName from the URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const passengerName = urlParams.get('passengerName');
+
+        // Compare the entered OTP with the generated OTP
+        if (enteredOTP === generatedOTP) {
+            // Payment successful, redirect to the booking success page
+            window.location.href = `/booking_success?passengerName=${encodeURIComponent(passengerName)}`;
+        } else {
+            // Invalid OTP, show an error message
+            alert("Invalid OTP. Please enter the correct OTP to complete the payment.");
+        }
+    });
+
+    
+    
+    
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        // Retrieve the query parameter from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const passengerName = urlParams.get('passengerName');
+
+        // Update the content of the passengerNameDisplay element
+        const passengerNameDisplay = document.getElementById('passengerNameDisplay');
+        passengerNameDisplay.textContent = `Passenger Name: ${decodeURIComponent(passengerName)}`;
+    });
+
+
+
+</script>
+</body>
+</html>

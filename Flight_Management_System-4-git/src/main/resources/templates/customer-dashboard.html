@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" >
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" >
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+    
+    <title>Flight Booking App</title>
+    <link rel="website icon" type=
+    "png" href="https://th.bing.com/th/id/OIP.XNl__t4pbd-z1mdVzyXvQAHaGl?w=179&h=180&c=7&r=0&o=5&pid=1.7">
+    
+    
+    
+    <style>
+    
+    
+    
+/* Styling for profile section */
+.profile-section {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.profile-photo img {
+       width: 50px;
+    height: 50px;
+    border-radius: 60%;
+    margin-right: 10px;
+    margin-top: -12px;
+}
+
+.profile-options {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 2;
+}
+
+.profile-section:hover .profile-options {
+    display: flex;
+}
+
+/* Style for Choose Profile Picture button */
+#chooseProfileLabel {
+        display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 200px;
+}
+
+#chooseProfileLabel:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for Remove Profile Picture button */
+#removeProfileLabel {
+    display: inline-block;
+    background-color: #e90707;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#removeProfileLabel:hover {
+    background-color: #c0392b;
+}
+
+    
+    
+
+    .notification-icon {
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.notification-dot {
+    display: none;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.has-notifications .notification-dot {
+    display: inline-block;
+}
+
+    
+    
+    
+    
+    
+    
+    
+    
+           .navbar {
+            background-color: #007BFF;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            font-size: 18px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .navbar a.active {
+            background-color: #0056b3;
+        }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+          body {
+          
+          cursor: url('https://th.bing.com/th/id/OIP.XdzGQKZJvhgmIieSsfUOygAAAA?pid=ImgDet&w=167&h=167&c=7'),auto;
+            font-family: Arial, sans-serif;
+            
+            background-color: #f4f4f4;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #777;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .form-group {
+            display: flex;
+        }
+
+        .form-group input {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Optional: Add media queries for responsiveness */
+        @media (max-width: 768px) {
+            form {
+                max-width: 100%;
+            }
+
+            .form-group {
+                flex-direction: column;
+            }
+
+            .form-group input {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    .card{
+  position: relative;
+  max-width: 300px;
+  height: auto;
+  background: linear-gradient(-45deg,#fe0847,#feae3f);
+  border-radius: 15px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  -webkit-box-shadow: 0 10px 15px rgba(0,0,0,.1) ;
+          box-shadow: 0 10px 15px rgba(0,0,0,.1) ;
+-webkit-transition: .5s;
+transition: .5s;
+}
+.card:hover{
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+.col-sm-4:nth-child(1) .card ,
+.col-sm-4:nth-child(1) .card .title .fa{
+  background: linear-gradient(-45deg,#f403d1,#64b5f6);
+ 
+}
+.col-sm-4:nth-child(2) .card,
+.col-sm-4:nth-child(2) .card .title .fa{
+  background: linear-gradient(-45deg,#ffec61,#f321d7);
+ 
+}
+.col-sm-4:nth-child(3) .card,
+.col-sm-4:nth-child(3) .card .title .fa{
+  background: linear-gradient(-45deg,#24ff72,#9a4eff);
+ 
+}
+.card::before{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: rgba(255, 255, 255, .1);
+z-index: 1;
+-webkit-transform: skewY(-5deg) scale(1.5);
+        transform: skewY(-5deg) scale(1.5);
+}
+.title .fa{
+  color:#fff;
+  font-size: 60px;
+  width: 100px;
+  height: 100px;
+  border-radius:  50%;
+  text-align: center;
+  line-height: 100px;
+  -webkit-box-shadow: 0 10px 10px rgba(0,0,0,.1) ;
+          box-shadow: 0 10px 10px rgba(0,0,0,.1) ;
+ 
+}
+.title h2 {
+  position: relative;
+  margin: 20px  0 0;
+  padding: 0;
+  color: #fff;
+  font-size: 28px;
+ z-index: 2;
+}
+.price,.option{
+  position: relative;
+  z-index: 2;
+}
+.price h4 {
+margin: 0;
+padding: 20px 0 ;
+color: #fff;
+font-size: 60px;
+}
+.option ul {
+  margin: 0;
+  padding: 0;
+ 
+}
+.option ul li {
+margin: 0 0 10px;
+padding: 0;
+list-style: none;
+color: #fff;
+font-size: 16px;
+}
+.card a {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  color : black;
+  width: 150px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 40px;
+  display: block;
+  text-align: center;
+  margin: 20px auto 0 ;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+ 
+}
+.card a:hover{
+    text-decoration: none;
+}
+    
+    section{padding:5% 0}
+.alizarin{background:#e74c3c}
+.amethyst{background:#9b59b6}
+.emerald{background:#2ecc71}
+.midnight-blue{background:#2c3e50}
+.peter-river{background:#3498db}
+.dl{background:#f0f0f0;padding:30px 0;border-radius:20px;position:relative}
+.dl:before{content:" ";height:20px;width:20px;background:#ddd;border-radius:20px;position:absolute;left:50%;top:20px;margin-left:-10px}
+.dl .brand{text-transform:uppercase;letter-spacing:3px;padding:10px 15px;margin-top:10px;text-align:center;min-height:100px}
+.dl .discount{min-height:50px;position:relative;font-size:80px;line-height:80px;text-align:center;font-weight:700;padding:20px 15px 0;color:#f1c40f}
+.dl .discount:after{content:" ";border-right:20px solid transparent;border-left:20px solid transparent;position:absolute;bottom:-20px;left:20%}
+.dl .discount.alizarin:after{border-top:20px solid #e74c3c}
+.dl .discount.peter-river:after{border-top:20px solid #3498db}
+.dl .discount.emerald:after{border-top:20px solid #2ecc71}
+.dl .discount.amethyst:after{border-top:20px solid #9b59b6}
+.dl .discount .type{font-size:20px;letter-spacing:1px;text-transform:uppercase;margin-top:-30px}
+.dl .descr{color:#999;margin-top:10px;padding:20px 15px}
+.dl .ends{padding:0 15px;color:#f1c40f;margin-bottom:10px}
+.dl .coupon{min-height:50px;text-align:center;text-transform:uppercase;font-weight:700;font-size:18px;padding:20px 15px}
+.dl .coupon a.open-code{color:#16a085}
+.dl .coupon .code{letter-spacing:1px;border-radius:4px;margin-top:10px;padding:10px 15px;color:#f1c40f;background:#f0f0f0}
+    
+    .coupon {
+  border: 5px dotted #bbb;
+  width: 80%;
+  border-radius: 15px;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.container1 {
+  padding: 2px 16px;
+  background-color: #f1f1f1;
+  max-width: 640px;
+}
+
+.promo {
+  background: #ccc;
+  padding: 3px;
+}
+
+.expire {
+  color: red;
+}
+    
+    
+    
+   @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+
+.container {
+    max-width: 500px;
+    margin: 20px auto;
+    background-color: #dc143c;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+}
+
+
+
+.card {
+  width: 400px;
+  height: 180px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  background-color: #dc143c;
+  padding: 10px 10px;
+  position: relative;
+}
+
+.main,
+.copy-button {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  align-items: center;
+}
+.card::after {
+  position: absolute;
+  content: "";
+  height: 40px;
+  right: -20px;
+  border-radius: 40px;
+  z-index: 1;
+  top: 70px;
+  background-color: #000;
+  width: 40px;
+}
+
+.card::before {
+  position: absolute;
+  content: "";
+  height: 40px;
+  left: -20px;
+  border-radius: 40px;
+  z-index: 1;
+  top: 70px;
+  background-color: #000;
+  width: 40px;
+}
+
+.co-img img {
+  width: 100px;
+  height: 100px;
+}
+.vertical {
+  border-left: 5px dotted black;
+  height: 100px;
+  position: absolute;
+  left: 40%;
+}
+
+.content h1 {
+  font-size: 35px;
+  margin-left: -20px;
+  color: #fff;
+}
+
+.content h1 span {
+  font-size: 18px;
+}
+.content h2 {
+  font-size: 18px;
+  margin-left: -20px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.content p {
+  font-size: 16px;
+  color: #fff;
+  margin-left: -20px;
+}
+
+.copy-button {
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0px;
+  border: 1px solid #e1e1e1;
+}
+
+.copy-button input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.copy-button button {
+  padding: 5px 20px;
+  background-color: #dc143c;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.buy{
+ position: absolute;
+  content: "";
+  bottom: 20px;
+  left:20px;
+  background-color: #dc143c;
+ } 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* ... Your existing CSS styles ... */
+/* ... Your existing CSS styles ... */
+
+/* Search Flights Form */
+#searchForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    flex: 1 1 250px;
+    display: flex;
+    align-items: center;
+}
+
+.form-group label {
+    flex: 0 0 100px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"] {
+    flex: 1 1 auto;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+button {
+    background-color: #007bff;
+    color: #000;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.flight-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.flight-card {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.flight-card h3 {
+    margin-bottom: 10px;
+}
+
+.flight-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    color: #444;
+    font-size: 14px;
+}
+
+.flight-card .book-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.flight-card .book-button:hover {
+    background-color: #0056b3;
+}
+
+/* ... Your existing CSS styles ... */
+
+    
+    
+    
+    
+    
+    
+    
+    /* Dashboard Container */
+.dashboard-container {
+    /* Your existing styles */
+    animation: slideInUp 0.5s ease-out; /* Animation for container entry */
+}
+
+/* Dashboard Entry Animation */
+@keyframes slideInUp {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Search Flights Form Animation */
+@keyframes slideInRight {
+    0% {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Booking History Animation */
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Profile Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+
+/* Hover Animation for Buttons */
+button:hover,
+.book-button:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s;
+}
+    
+    
+        .book-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+         table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        td {
+            color: #333;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+        button{
+        background-color: #4CAF50;
+            color: white;
+            padding: 5px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            color: #000;
+        }
+
+  
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background-color: #68c7ff;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+
+        .flight-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .flight-card {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .flight-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .flight-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .flight-card .book-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .flight-card .book-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Media queries for responsive design */
+        @media screen and (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            .flight-list {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .search-form {
+                flex-direction: column;
+            }
+            .search-form input[type="text"],
+            .search-form input[type="date"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+    /* Set up the container and background */
+ .loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background-color: #000;
+  overflow: hidden;
+   text-align: center;
+}
+
+
+
+        /* Define animation 
+       @keyframes takeoff {
+  0% { transform: translateY(0) rotate(0); }
+  20% { transform: translateY(-100px) rotate(-5deg); }
+  40% { transform: translateY(-200px) rotate(-10deg); }
+  60% { transform: translateY(-300px) rotate(-15deg); }
+  80% { transform: translateY(-400px) rotate(-20deg); }
+  100% { transform: translateY(-500px) rotate(-25deg); opacity: 0; }
+} */
+
+/* Apply animation to the airplane 
+.airplane {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: takeoff 5s ease-in-out;
+}
+
+
+
+.loading-text {
+  font-size: 56px;
+  margin-top: 110px;
+  left:40%;
+  color:white; 
+}
+*/
+
+
+        /* Hide the content initially */
+        body.loading-content #content {
+            display: none;
+        }
+        
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  background:#000;
+}
+
+.dash {
+  margin: 0 15px;
+  width: 35px;
+  height: 15px;
+  border-radius: 8px;
+  background: blue;
+  box-shadow: 0 0 10px 0 #FECDFF;
+}
+
+.uno {
+  margin-right: -18px;
+  transform-origin: center left;
+  animation: spin 3s linear infinite;  
+}
+
+.dos {
+  transform-origin: center right;
+  animation: spin2 3s linear infinite;
+  animation-delay: .2s;
+}
+
+.tres {
+  transform-origin: center right;
+  animation: spin3 3s linear infinite;
+  animation-delay: .3s;
+}
+
+.cuatro {
+  transform-origin: center right;
+  animation: spin4 3s linear infinite;
+  animation-delay: .4s;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(360deg);
+  }
+  30% {
+    transform: rotate(370deg);
+  }
+  35% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin2 {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-180deg);
+  }
+  35% {
+    transform: rotate(-190deg);
+  }
+  40% {
+    transform: rotate(-180deg);
+  }
+  78% {
+    transform: rotate(-180deg);
+  }
+  95% {
+    transform: rotate(-360deg);
+  }
+  98% {
+    transform: rotate(-370deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes spin3 {
+  0% {
+    transform: rotate(0deg);
+  }
+  27% {
+    transform: rotate(0deg);  
+  }
+  40% {
+    transform: rotate(180deg);
+  }
+  45% {
+    transform: rotate(190deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  62% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(360deg);
+  }
+  80% {
+    transform: rotate(370deg);
+  }
+  85% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin4 {
+  0% {
+    transform: rotate(0deg);
+  }
+  38% {
+    transform: rotate(0deg);
+  }
+  60% {
+    transform: rotate(-360deg);
+  }
+  65% {
+    transform: rotate(-370deg);
+  }
+  75% {
+    transform: rotate(-360deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+
+
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+
+
+        
+    </style>
+</head>
+<body>
+
+
+   <div class="loading-container" id="loadingContainer">
+  
+<div class="container">
+  <div class="dash uno"></div>
+  <div class="dash dos"></div>
+  <div class="dash tres"></div>
+  <div class="dash cuatro"></div>
+</div>  </div>
+  
+  
+
+<div id="content" style="display: none;">
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+   
+        <a href="#" onclick="showSearchForm()">Search Flights</a>
+        <a href="#" onclick="showBookingHistory()">Booking History</a>
+        <a href="#" onclick="showProfile()">Profile</a>
+         <a href="#" onclick="showNotifications()">Notifications <span class="notification-icon">&#x1F514;<span class="notification-dot"></span></span></a>
+
+           <a href="#" onclick="showContactModal()">Contact Us</a>
+           
+          
+   <div class="profile-section">
+    <div class="profile-photo" id="profilePhoto">
+        <img src="https://tse3.mm.bing.net/th/id/OIP.c6i5QryQFXAP0DVS6UPHIgAAAA?pid=ImgDet&w=196&h=196&c=7" alt="Profile Photo">
+    </div>
+    <div class="profile-options" id="profileOptions">
+        <label for="profilePictureInput" id="chooseProfileLabel">Choose Profile Picture</label>
+        <input type="file" id="profilePictureInput" style="display: none;">
+        <button id="removeProfileBtn" style="
+    background-color: #ff5138;">Remove Profile Picture</button>
+    </div>
+</div>
+
+
+
+
+        
+        
+        
+        
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+    
+    <div class="notification-panel" id="notificationPanel">
+    <h3>Notifications</h3>
+    <ul id="notificationList">
+        <!-- Notifications will be dynamically added here -->
+    </ul>
+</div>
+
+    <!-- Customer Dashboard Container -->
+    <div class="dashboard-container" id="customerDashboardContainer">
+        <div class="dashboard-header">
+            <h1>Flight Booking App</h1>
+            <p>Customer ID: <span id="customerId">Loading...</span></p>
+            
+        </div>
+        <div class="dashboard-content">
+            <!-- ... Your existing customer dashboard content ... -->
+        </div>
+    </div>
+
+    <!-- Your booking history container -->
+    <div class="dashboard-container" id="bookingHistoryContainer" style="display: none;">
+        <div class="dashboard-header">
+            <h2>Booking History</h2>
+            <p>Customer ID: <span id="customerId"></span></p>
+            
+        </div>
+        <div class="dashboard-content">
+            <div class="booking-history-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Flight Name</th>
+                            <th>Date</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingHistoryTableBody">
+                        <!-- Booking history table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your search flights form container -->
+    <div class="dashboard-container" id="searchFlightFormContainer" style="display: none;">
+        <div class="dashboard-header">
+            <h2>Search Flights</h2>
+        </div>
+        <div class="dashboard-content">
+             <form>
+        <h2>Book Your Flight</h2>
+
+        <div class="form-group">
+            <label for="source">From:</label>
+            <input type="text" id="source" name="source" required>
+
+            <label for="destination">To:</label>
+            <input type="text" id="destination" name="destination" required>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <button type="button" onclick="searchFlights()">Search Flights</button>
+        </div>
+    </form>
+            
+            <h2>Search Results</h2>
+            <div class="booking-history-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Flight ID</th>
+                            <th>Flight Name</th>
+                            <th>Date</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Price</th>
+                            <th>Book</th>
+                        </tr>
+                    </thead>
+                    <tbody id="flightTableBody">
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Your profile container -->
+    <div class="dashboard-container" id="profileContainer" style="display: none;">
+        <div class="dashboard-header">
+            <h2>Customer Profile</h2>
+        </div>
+        <div class="dashboard-content">
+            <table>
+                <tbody id="profileTableBody">
+                    <!-- Customer profile details will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+        
+    
+    
+
+<section id="labels">
+  <div class="co">
+	<div class="row">
+        <div class="col-sm-6 col-md-3">
+          <div class="dl">
+            <div class="brand">
+                <h2>AIR773</h2>
+            </div>
+            <div class="discount alizarin">30%
+                <div class="type">off</div>
+            </div>
+            <div class="descr">
+                <strong>Mei mucius gloriatur reprimique mollis*.</strong> 
+                Ad sonet perfecto antiopam mei, denique molestie ne has. 
+            </div>
+            <div class="ends">
+                <small>* Conditions and restrictions apply.</small>
+            </div>
+            <div class="coupon midnight-blue">
+                <a data-toggle="collapse" href="#code-1" class="open-code">Get a code</a>
+                <div id="code-1" class="collapse code">LV5MAY14</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div  class="dl">
+            <div class="brand">
+                <h2>RAPID</h2>
+            </div>
+            <div class="discount emerald">
+                50%
+                <div class="type">
+                    off
+                </div>
+            </div>
+            <div class="descr">
+                <strong>
+                    Ea per iuvaret ocurreret*. 
+                </strong> 
+                sit ea detraxit menandri mediocritatem, in mel dicant mentitum. 
+            </div>
+            <div class="ends">
+                <small>
+                   * Conditions and restrictions apply.
+                </small>
+            </div>
+            <div class="coupon midnight-blue">
+                <a data-toggle="collapse" href="#code-2" class="open-code">Get a code</a>
+                <div id="code-2" class="collapse in code">
+                    MNO123ST
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div  class="dl">
+            <div class="brand">
+                <h2>
+                    converse
+                </h2>
+            </div>
+            <div class="discount peter-river">
+            15%
+                <div class="type">
+                    off
+                </div>
+            </div>
+            <div class="descr">
+                <strong>
+                     Solet consul tractatos ei pro*. 
+                </strong> 
+                Ei mei quot invidunt explicari, placerat percipitur intellegam.
+            </div>
+            <div class="ends">
+                <small>
+                   * Conditions and restrictions apply.
+                </small>
+            </div>
+            <div class="coupon midnight-blue">
+                <a data-toggle="collapse" href="#code-3" class="open-code">Get a code</a>
+                <div id="code-3" class="collapse code">
+                    OLV4SY3R
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div  class="dl">
+            <div class="brand">
+                <h2>
+                    adidas
+                </h2>
+            </div>
+            <div class="discount amethyst">
+                25%
+                <div class="type">
+                    off
+                </div>
+            </div>
+            <div class="descr">
+                <strong>
+                    Cu aliquip persius alterum duo*. 
+                </strong> 
+                Possit equidem disputando usu et, sea invidunt scriptorem in. 
+            </div>
+            <div class="ends">
+                <small>
+                   * Conditions and restrictions apply.
+                </small>
+            </div>
+            <div class="coupon midnight-blue">
+                <a data-toggle="collapse" href="#code-4" class="open-code">Get a code</a>
+                <div id="code-4" class="collapse code">
+                    ZUY4OPLQ
+                </div>
+            </div>
+          </div>
+        </div>
+	</div>
+  </div>
+</section>
+
+
+    
+    
+    
+    
+    
+    
+    <section>
+  <div class="container-fluid">
+    <div class="cont">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="card text-center">
+            <div class="title">
+              <i class="fa fa-paper-plane" aria-hidden="true"></i>
+              <h2>Basic</h2>
+            </div>
+            <div class="price">
+              <h4><sup>$</sup>25</h4>
+            </div>
+            <div class="option">
+              <ul>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> 20% Off </li>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> 50% Refund </li>
+              <li> <i class="fa fa-times" aria-hidden="true"></i> Free Cancellation </li>
+              <li> <i class="fa fa-times" aria-hidden="true"></i> Live Support </li>
+              </ul>
+            </div>
+            <a href="#">Subscribe Now </a>
+          </div>
+        </div>
+         
+        <div class="col-sm-4">
+          <div class="card text-center">
+            <div class="title">
+              <i class="fa fa-plane" aria-hidden="true"></i>
+              <h2>Standard</h2>
+            </div>
+            <div class="price">
+              <h4><sup>$</sup>50</h4>
+            </div>
+            <div class="option">
+              <ul>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> 50% Off </li>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> 75% Refund </li>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> Free Cancellation </li>
+              <li> <i class="fa fa-times" aria-hidden="true"></i> Live Support </li>
+              </ul>
+            </div>
+            <a href="#">Subscribe Now </a>
+          </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="card text-center">
+            <div class="title">
+              <i class="fa fa-rocket" aria-hidden="true"></i>
+              <h2>Premium</h2>
+            </div>
+            <div class="price">
+              <h4><sup>$</sup>100</h4>
+            </div>
+            <div class="option">
+              <ul>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> 75%off </li>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> 100% Refund </li>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> Free Cancellation </li>
+              <li> <i class="fa fa-check" aria-hidden="true"></i> Live Support </li>
+              </ul>
+            </div>
+            <a href="#">Subscribe Now </a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+    
+    
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    <div class="modal" id="contactModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeContactModal()">&times;</span>
+        <h2>Contact Us</h2>
+        <p>Email: <a href="mailto:battuvamsi5@gmail.com">battuvamsi5@gmail.com</a></p>
+        <p>Phone: <a href="tel:+91 9515204566">+91 9515204566</a> <span onclick="copyPhoneNumber()" class="copy-icon">
+    <svg width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+        <path d="M13 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h10zm0 1H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+        <path d="M7 1h2a1 1 0 0 1 1 1v1H6V2a1 1 0 0 1 1-1z"/>
+    </svg>
+</span></p>
+
+    </div>
+</div>
+
+
+
+    
+    
+   
+
+
+
+
+
+    
+  
+    <script>
+    
+    
+    
+    function copyPhoneNumber() {
+        const phoneNumber = "+919515204566"; // Replace with your actual phone number
+        const tempInput = document.createElement("input");
+        document.body.appendChild(tempInput);
+        tempInput.value = phoneNumber;
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Phone number copied to clipboard: " + phoneNumber);
+    }
+
+    
+    
+    
+    function showContactModal() {
+        const contactModal = document.getElementById("contactModal");
+        contactModal.style.display = "block";
+    }
+
+    function closeContactModal() {
+        const contactModal = document.getElementById("contactModal");
+        contactModal.style.display = "none";
+    }
+
+    
+    
+    
+ // JavaScript for profile photo section
+document.addEventListener("DOMContentLoaded", function () {
+    const profilePhoto = document.getElementById("profilePhoto");
+    const profileOptions = document.getElementById("profileOptions");
+    const chooseProfileLabel = document.getElementById("chooseProfileLabel");
+    const profilePictureInput = document.getElementById("profilePictureInput");
+    const removeProfileBtn = document.getElementById("removeProfileBtn");
+
+    // Retrieve profile image path from local storage
+    let profileImagePath = localStorage.getItem("profileImagePath") || "https://tse3.mm.bing.net/th/id/OIP.c6i5QryQFXAP0DVS6UPHIgAAAA?pid=ImgDet&w=196&h=196&c=7";
+    profilePhoto.innerHTML = `<img src="${profileImagePath}" alt="Profile Photo">`;
+
+    // Function to handle profile picture selection
+    function handleProfilePictureSelection(event) {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profileImagePath = e.target.result;
+                localStorage.setItem("profileImagePath", profileImagePath);
+                profilePhoto.innerHTML = `<img src="${profileImagePath}" alt="Profile Photo">`;
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    }
+
+    // Function to remove profile photo
+    function removeProfilePicture() {
+        profileImagePath = "https://tse3.mm.bing.net/th/id/OIP.c6i5QryQFXAP0DVS6UPHIgAAAA?pid=ImgDet&w=196&h=196&c=7";
+        localStorage.removeItem("profileImagePath");
+        profilePhoto.innerHTML = `<img src="${profileImagePath}" alt="Profile Photo">`;
+    }
+
+    // Add change event listener to profile picture input
+    profilePictureInput.addEventListener("change", handleProfilePictureSelection);
+
+    // Add click event listener to remove profile button
+    removeProfileBtn.addEventListener("click", removeProfilePicture);
+
+    // Show/hide profile options on profile photo click
+    profilePhoto.addEventListener("click", function () {
+        profileOptions.classList.toggle("show");
+    });
+
+    // Hide profile options when clicking outside the section
+    document.addEventListener("click", function (event) {
+        if (!profileSection.contains(event.target)) {
+            profileOptions.classList.remove("show");
+        }
+    });
+});
+
+    
+    
+    
+    
+ // JavaScript Code
+   function fetchNotifications() {
+    // Make an API call to fetch notifications
+    fetch("/get-notifications")
+        .then(response => response.json())
+        .then(notifications => {
+            // Display the notifications
+            const notificationList = document.getElementById("notificationList");
+            notificationList.innerHTML = "";
+
+            notifications.forEach(notification => {
+                const li = document.createElement("li");
+                li.textContent = notification.message;
+                notificationList.appendChild(li);
+            });
+        })
+        .catch(error => console.error("Error fetching notifications:", error));
+}
+
+ 
+   function showNotifications() {
+	    const notificationPanel = document.getElementById("notificationPanel");
+	    notificationPanel.style.display = "block"; // Show the notification panel
+
+	    fetchNotifications(); // Fetch and display notifications
+	}
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // Function to show the loading animation
+    function showLoadingSpinner() {
+        document.getElementById("loadingContainer").style.display = "block";
+    }
+
+    // Function to hide the loading container and show the content
+    function hideLoadingSpinner() {
+        document.getElementById("loadingContainer").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    }
+
+    // Show the loading spinner
+    showLoadingSpinner();
+
+    // Hide the loading spinner and show the content after a delay once the page content has loaded
+    window.addEventListener("load", function () {
+        setTimeout(hideLoadingSpinner, 4000); // Hide after 2 seconds (you can adjust this value as needed)
+    }); 
+    
+    
+    function logout() {
+        // Fetch the logout endpoint on the backend
+        fetch('/logout', {
+            method: 'GET', // Use GET since we're accessing the logout endpoint
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content // Include the CSRF token as a header
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Logout successful, redirect to the login page
+                window.location.href = '/login'; // Redirect to the login page using Thymeleaf URL expression
+            } else {
+                alert('Error logging out. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while logging out. Please try again.');
+        });
+    }
+    
+    
+   //importent never delete 
+    function fetchCustomerDetails() {
+        // Make an API call to fetch the customer details from the backend
+        fetch("/customer-dashboard")
+            .then(response => response.json())
+            .then(customer => {
+                // Display the customer ID on the dashboard
+                document.getElementById("customerId").textContent = customer.customer_id;
+                // Optionally, you can set the customer ID in local storage for future use
+                localStorage.setItem("customerId", customer.customer_id);
+                fetchProfileDetails(customer.customer_id);
+               // bookFlight(6, customer.customer_id);
+                
+                // Call the function to fetch booking history for the logged-in customer
+                fetchLoggedInUserBookingHistory(customer.customer_id);
+               // bookFlight(flightId, customerId);
+               // return customer.customer_id;
+            })
+            .catch(error => {
+                console.error("Error fetching customer details:", error);
+               // alert("An error occurred while fetching customer details. Please try again.");
+            });
+    }
+
+    // Call the function to fetch and display customer details when the page loads
+    fetchCustomerDetails();
+    
+    // Function to fetch the booking history for the logged-in customer
+    function fetchLoggedInUserBookingHistory(customerId) {
+        // Check if the customerId is available and valid before making the API request
+        if (customerId !== null && customerId !== undefined && !isNaN(customerId)) {
+            fetch(`/booking-history/${customerId}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch booking history");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    // Display the booking history data on the frontend
+                    displayBookingHistory(data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching booking history:", error);
+                   // alert("Failed to fetch booking history. Please try again.");
+                });
+        } else {
+            // Handle the case when the customerId is not available or invalid
+            console.error("customerId is not available or invalid.");
+            //alert("customerId is not available or invalid. Please log in or try again later.");
+        }
+    }
+    
+    
+    function showSearchForm() {
+        document.getElementById("searchFlightFormContainer").style.display = "block";
+        document.getElementById("bookingHistoryContainer").style.display = "none";
+        document.getElementById("profileContainer").style.display = "none";
+    }
+
+    function showBookingHistory() {
+        document.getElementById("searchFlightFormContainer").style.display = "none";
+        document.getElementById("bookingHistoryContainer").style.display = "block";
+        document.getElementById("profileContainer").style.display = "none";
+        // Call the function to fetch booking history for the logged-in customer
+        fetchLoggedInUserBookingHistory();
+    }
+    
+    function showProfile() {
+        document.getElementById("searchFlightFormContainer").style.display = "none";
+        document.getElementById("bookingHistoryContainer").style.display = "none";
+        document.getElementById("profileContainer").style.display = "block";
+        // Fetch and display customer profile details
+        fetchProfileDetails();
+    }
+    
+    function fetchProfileDetails(customerId) {
+        // Make an API call to fetch the customer profile details from the backend
+        fetch(`/v2/customer-profile?customer_id=${customerId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch profile details");
+                }
+                return response.json();
+            })
+            .then(profile => {
+                // Display the customer profile details in the table
+                const profileTableBody = document.getElementById("profileTableBody");
+                profileTableBody.innerHTML = ""; // Clear existing rows
+
+                const newRow1 = profileTableBody.insertRow();
+                newRow1.innerHTML = `<td>Customer ID:</td><td>${profile.customer_id}</td>`;
+
+                const newRow2 = profileTableBody.insertRow();
+                newRow2.innerHTML = `<td>Full Name:</td><td>${profile.customer_name}</td>`;
+                
+              var  name=profile.customer_name;
+              
+             
+
+                const newRow3 = profileTableBody.insertRow();
+                newRow3.innerHTML = `<td>Email:</td><td>${profile.customer_email}</td>`;
+
+                const newRow4 = profileTableBody.insertRow();
+                newRow4.innerHTML = `<td>Phone:</td><td>${profile.customer_phone}</td>`;
+            })
+            .catch(error => {
+                console.error("Error fetching profile details:", error);
+               // alert("An error occurred while fetching profile details. Please try again.");
+            });
+    }
+
+
+    function searchFlights() {
+        // Get input values
+        const source = document.getElementById("source").value;
+        const destination = document.getElementById("destination").value;
+        const date = document.getElementById("date").value;
+
+        // Make the API call to search for flights
+        fetch(`/search?source=${source}&destination=${destination}&date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data (list of flights)
+                displayFlights(data);
+            })
+            .catch(error => {
+                console.error("Error fetching flights:", error);
+                alert("An error occurred while fetching flights. Please try again.");
+            });
+    }
+
+    function displayFlights(flights) {
+        const flightTableBody = document.getElementById("flightTableBody");
+        flightTableBody.innerHTML = ""; // Clear existing rows
+
+        // Check if there are any flights returned
+        if (flights.length === 0) {
+            const newRow = flightTableBody.insertRow();
+            const cell = newRow.insertCell();
+            cell.colSpan = 7;
+            cell.textContent = "No flights found for the selected criteria.";
+        } else {
+            flights.forEach(flight => {
+                const newRow = flightTableBody.insertRow();
+                newRow.innerHTML = `
+                    <td>${flight.flight_id}</td>
+                    <td>${flight.flight_name}</td>
+                    <td>${flight.date}</td>
+                    <td>${flight.flight_source}</td>
+                    <td>${flight.flight_destination}</td>
+                    <td>${flight.flight_price} INR</td>
+                    <td><a class="book-button" href="/details-filling?flightId=${flight.flight_id}&flightName=${encodeURIComponent(flight.flight_name)}">Book Flight</a></td>
+                   
+                `;
+            });
+        }
+    }
+
+    function bookFlight(flightId, customerId) {
+    	 customerId = 2;
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        fetch(`/book-flight/${flightId}?customerId=${customerId}`, {  // Include customerId as a request parameter
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken,
+            },
+            // Add any payload or data if required
+        })
+        .then(response => {
+            if (response.ok) {
+                // Flight booking successful, redirect to the booking success page
+                window.location.href = '/payment'; // Replace with the correct URL for the booking success page
+            } else {
+                // Flight booking failed, handle the error response
+                alert("Flight booking failed. Please try again later.");
+            }
+        })
+        .catch(error => {
+            console.error("Error booking flight:", error);
+            alert("An error occurred while booking the flight. Please try again later.");
+        });
+    }
+    // bookFlight(flightId, customerId);
+   // function fetchProfileDetails();
+
+
+    function displayBookingHistory(bookingHistory) {
+        const bookingHistoryTableBody = document.getElementById("bookingHistoryTableBody");
+        bookingHistoryTableBody.innerHTML = ""; // Clear existing rows
+
+        if (bookingHistory.length === 0) {
+            const newRow = bookingHistoryTableBody.insertRow();
+            const cell = newRow.insertCell();
+            cell.colSpan = 6;
+            cell.textContent = "No booking history found.";
+        } else {
+            bookingHistory.forEach((booking) => {
+                const newRow = bookingHistoryTableBody.insertRow();
+                newRow.innerHTML = `
+                    <td>${booking.bookingId}</td>
+                    <td>${booking.flight.flight_name}</td>
+                    <td>${booking.flight.date}</td>
+                    <td>${booking.flight.flight_source}</td>
+                    <td>${booking.flight.flight_destination}</td>
+                    <td>$${booking.bookingAmount}</td>
+                `;
+            });
+        }
+    }
+ // Call the fetchProfileDetails function with the customer ID as an argument
+     // Replace "123" with the actual customer ID you want to fetch
+
+    
+    </script>
+
+</body>
+</html>
+

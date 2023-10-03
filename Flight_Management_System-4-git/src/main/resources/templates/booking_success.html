@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Ticket</title>
+     <link rel="website icon" type=
+    "png" href="https://th.bing.com/th/id/OIP.XNl__t4pbd-z1mdVzyXvQAHaGl?w=179&h=180&c=7&r=0&o=5&pid=1.7">
+    
+    
+    <!-- Add your CSS for custom styling -->
+    <style>
+    
+
+    
+    
+    
+    
+    
+    .ticket-container {
+            display: none; /* Hide the ticket initially */
+        }
+        
+        
+         .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            transition: opacity 0.5s, visibility 0.5s;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loader.loader--hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader::after {
+            content: "";
+            width: 75px;
+            height: 75px;
+            left:100%;
+            border: 15px solid transparent;
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: loading 2s linear infinite, glowing 1.5s ease-in-out infinite, pulsating 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                transform: rotate(0turn);
+            }
+            100% {
+                transform: rotate(1turn);
+            }
+        }
+
+        @keyframes glowing {
+            0%, 100% {
+                box-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            }
+            50% {
+                box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc, 0 0 60px #00ffcc;
+            }
+        }
+
+        @keyframes pulsating {
+            0%, 100% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+        
+        
+        
+    
+   .rating {
+        /* Add styles to position the rating div below the ticket */
+       display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        color:#ffffff;
+    }
+
+    .star {
+        font-size: 60px;
+        cursor: pointer;
+    }
+
+    .star.selected {
+        color: gold;
+    }
+    
+    
+    
+    
+    
+    
+     @keyframes slide-up {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fade-in {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+     
+    
+    
+     h1 {
+            font-size: 52px;
+            color: #54b854;
+            animation: fade-in 2s ease-in-out;
+             text-align: center;
+            animation: slide-up 1s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent background to the message */
+            padding: 30px;
+            border-radius: 10px;
+           
+        }
+        
+         body{
+            font-family: Arial, sans-serif;
+    background-image: url('https://cdn.pixabay.com/photo/2020/03/27/19/27/airplane-4974678_640.jpg');
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the image */
+    margin: 0;
+    
+    justify-content: center;
+    
+    height: 90vh;
+        }
+
+        
+        
+        /* Update colors for some elements */
+        .ticket {
+            background: linear-gradient(45deg, #FFB300, #FF7700);
+            box-shadow: 0 0 10px rgba(255, 119, 0, 0.7);
+            border-top: 1px solid #FF7700;
+            border-bottom: 1px solid #FF7700;
+        }
+
+        .left li:nth-child(-n+2),
+        .left li:nth-child(3),
+        .left li:nth-child(6),
+        .left li:nth-child(13),
+        .left li:nth-child(14) {
+            border-right: 5px solid #FF7700;
+        }
+
+        .right li:nth-child(-n+2),
+        .right li:nth-child(3),
+        .right li:nth-child(4),
+        .right li:nth-child(6),
+        .right li:nth-child(8),
+        .right li:nth-child(9),
+        .right li:nth-child(11),
+        .right li:nth-child(13) {
+            border-left: 5px solid #FF7700;
+        }
+
+        .ticket:after,
+        .ticket:before {
+            box-shadow: inset 0 0 0 #FF7700, inset 0 -10px 0 #FF2D00, inset 0 -20px 0 #FF7700, inset 0 -30px 0 #FF2D00, inset 0 -40px 0 #FF7700, inset 0 -50px 0 #999999, inset 0 -60px 0 #E5E5E5, inset 0 -70px 0 #999999, inset 0 -80px 0 #E5E5E5, inset 0 -90px 0 #999999, inset 0 -100px 0 #E5E5E5, inset 0 -110px 0 #999999, inset 0 -120px 0 #E5E5E5, inset 0 -130px 0 #999999, inset 0 -140px 0 #E5E5E5, inset 0 -150px 0 #B0B0B0, inset 0 -160px 0 #EEEEEE, inset 0 -170px 0 #B0B0B0, inset 0 -180px 0 #EEEEEE, inset 0 -190px 0 #B0B0B0, inset 0 -200px 0 #EEEEEE, inset 0 -210px 0 #B0B0B0, inset 0 -220px 0 #FF7700, inset 0 -230px 0 #FF2D00, inset 0 -240px 0 #FF7700, inset 0 -250px 0 #FF2D00;
+        }
+
+        /* Update text colors */
+        .airline, .boarding, .jfk, .sfo {
+            color: #fff;
+        }
+
+        /* Add colorful elements */
+        .watermark {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .name span, .flight span, .gate span, .seat span, .boardingtime span {
+            color: #fff;
+        }
+
+.box{
+  position: absolute;
+  top: calc(50% - 125px);
+  top: -webkit-calc(50% - 125px);
+  left: calc(50% - 300px);
+  left: -webkit-calc(50% - 300px);
+}
+
+.ticket{
+  width: 600px;
+  height: 250px;
+  background: #FFB300;
+  border-radius: 3px;
+  box-shadow: 0 0 100px #aaa;
+  border-top: 1px solid #E89F3D;
+  border-bottom: 1px solid #E89F3D;
+}
+
+.left{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  top: 0px;
+  left: -5px;
+}
+
+.left li{
+  width: 0px;
+  height: 0px;
+}
+
+.left li:nth-child(-n+2){
+  margin-top: 8px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #FFB300;
+}
+
+.left li:nth-child(3),
+.left li:nth-child(6){
+  margin-top: 8px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #EEEEEE;
+}
+
+.left li:nth-child(4){
+  margin-top: 8px;
+  margin-left: 2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #EEEEEE;
+}
+
+.left li:nth-child(5){
+  margin-top: 8px;
+  margin-left: -1px;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent; 
+  border-right: 6px solid #EEEEEE;
+}
+
+.left li:nth-child(7),
+.left li:nth-child(9),
+.left li:nth-child(11),
+.left li:nth-child(12){
+  margin-top: 7px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #E5E5E5;
+}
+
+.left li:nth-child(8){
+  margin-top: 7px;
+  margin-left: 2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #E5E5E5;
+}
+
+.left li:nth-child(10){
+  margin-top: 7px;
+  margin-left: 1px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #E5E5E5;
+}
+
+.left li:nth-child(13){
+  margin-top: 7px;
+  margin-left: 2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #FFB300;
+}
+
+.left li:nth-child(14){
+  margin-top: 7px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 5px solid #FFB300;
+}
+
+.right{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  top: 0px;
+  right: -5px;
+}
+
+.right li:nth-child(-n+2){
+  margin-top: 8px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #FFB300;
+}
+
+.right li:nth-child(3),
+.right li:nth-child(4),
+.right li:nth-child(6){
+  margin-top: 8px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #EEEEEE;
+}
+
+.right li:nth-child(5){
+  margin-top: 8px;
+  margin-left: -2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #EEEEEE;
+}
+
+.right li:nth-child(8),
+.right li:nth-child(9),
+.right li:nth-child(11){
+  margin-top: 7px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #E5E5E5;
+}
+
+.right li:nth-child(7){
+  margin-top: 7px;
+  margin-left: -3px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #E5E5E5;
+}
+
+.right li:nth-child(10){
+  margin-top: 7px;
+  margin-left: -2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #E5E5E5;
+}
+
+.right li:nth-child(12){
+  margin-top: 7px;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent; 
+  border-left: 6px solid #E5E5E5;
+}
+
+.right li:nth-child(13),
+.right li:nth-child(14){
+  margin-top: 7px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-left: 5px solid #FFB300;
+}
+
+.ticket:after{
+  content: '';
+  position: absolute;
+  right: 200px;
+  top: 0px;
+  width: 2px;
+  height: 250px;
+  box-shadow: inset 0 0 0 #FFB300,
+    inset 0 -10px 0 #B56E0A,
+    inset 0 -20px 0 #FFB300,
+    inset 0 -30px 0 #B56E0A,
+    inset 0 -40px 0 #FFB300,
+    inset 0 -50px 0 #999999,
+    inset 0 -60px 0 #E5E5E5,
+    inset 0 -70px 0 #999999,
+    inset 0 -80px 0 #E5E5E5,
+    inset 0 -90px 0 #999999,
+    inset 0 -100px 0 #E5E5E5,
+    inset 0 -110px 0 #999999,
+    inset 0 -120px 0 #E5E5E5,
+    inset 0 -130px 0 #999999,
+    inset 0 -140px 0 #E5E5E5,
+    inset 0 -150px 0 #B0B0B0,
+    inset 0 -160px 0 #EEEEEE,
+    inset 0 -170px 0 #B0B0B0,
+    inset 0 -180px 0 #EEEEEE,
+    inset 0 -190px 0 #B0B0B0,
+    inset 0 -200px 0 #EEEEEE,
+    inset 0 -210px 0 #B0B0B0,
+    inset 0 -220px 0 #FFB300,
+    inset 0 -230px 0 #B56E0A,
+    inset 0 -240px 0 #FFB300,
+    inset 0 -250px 0 #B56E0A;
+}
+
+.ticket:before{
+  content: '';
+  position: absolute;
+  z-index: 5;
+  right: 199px;
+  top: 0px;
+  width: 1px;
+  height: 250px;
+  box-shadow: inset 0 0 0 #FFB300,
+    inset 0 -10px 0 #F4D483,
+    inset 0 -20px 0 #FFB300,
+    inset 0 -30px 0 #F4D483,
+    inset 0 -40px 0 #FFB300,
+    inset 0 -50px 0 #FFFFFF,
+    inset 0 -60px 0 #E5E5E5,
+    inset 0 -70px 0 #FFFFFF,
+    inset 0 -80px 0 #E5E5E5,
+    inset 0 -90px 0 #FFFFFF,
+    inset 0 -100px 0 #E5E5E5,
+    inset 0 -110px 0 #FFFFFF,
+    inset 0 -120px 0 #E5E5E5,
+    inset 0 -130px 0 #FFFFFF,
+    inset 0 -140px 0 #E5E5E5,
+    inset 0 -150px 0 #FFFFFF,
+    inset 0 -160px 0 #EEEEEE,
+    inset 0 -170px 0 #FFFFFF,
+    inset 0 -180px 0 #EEEEEE,
+    inset 0 -190px 0 #FFFFFF,
+    inset 0 -200px 0 #EEEEEE,
+    inset 0 -210px 0 #FFFFFF,
+    inset 0 -220px 0 #FFB300,
+    inset 0 -230px 0 #F4D483,
+    inset 0 -240px 0 #FFB300,
+    inset 0 -250px 0 #F4D483;
+}
+
+.content{
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  height: 170px;
+  background: #eee;
+}
+
+.airline{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: bold;
+  color: rgba(0,0,102,1);
+}
+
+.boarding{
+  position: absolute;
+  top: 10px;
+  right: 220px;
+  font-family: Arial;
+  font-size: 18px;
+  color: rgba(255,255,255,0.6);
+}
+
+.jfk{
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-family: Arial;
+  font-size: 38px;
+  color: #222;
+}
+
+.sfo{
+  position: absolute;
+  top: 10px;
+  left: 250px;
+  font-family: Arial;
+  font-size: 38px;
+  color: #222;
+}
+
+.plane{
+  position: absolute;
+  left: 150px;
+  top: 0px;
+}
+
+.sub-content{
+  background: #e5e5e5;
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  top: 70px;
+}
+
+.watermark{
+  position: absolute;
+  left: 5px;
+  top: -10px;
+  font-family: Arial;
+  font-size: 110px;
+  font-weight: bold;
+  color: rgba(255,255,255,0.2);
+}
+
+.name{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: Arial Narrow, Arial;
+  font-weight: bold;
+  font-size: 14px;
+  color: #999;
+}
+
+.name span{
+  color: #555;
+  font-size: 17px;
+}
+
+.flight{
+  position: absolute;
+  top: 10px;
+  left: 180px;
+  font-family: Arial Narrow, Arial;
+  font-weight: bold;
+  font-size: 14px;
+  color: #999;
+}
+
+.flight span{
+  color: #555;
+  font-size: 17px;
+}
+
+.gate{
+  position: absolute;
+  top: 10px;
+  left: 280px;
+  font-family: Arial Narrow, Arial;
+  font-weight: bold;
+  font-size: 14px;
+  color: #999;
+}
+
+.gate span{
+  color: #555;
+  font-size: 17px;
+}
+
+
+.seat{
+  position: absolute;
+  top: 10px;
+  left: 350px;
+  font-family: Arial Narrow, Arial;
+  font-weight: bold;
+  font-size: 14px;
+  color: #999;
+}
+
+.seat span{
+  color: #555;
+  font-size: 17px;
+}
+
+.boardingtime{
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  font-family: Arial Narrow, Arial;
+  font-weight: bold;
+  font-size: 14px;
+  color: #999;
+}
+
+.boardingtime span{
+  color: #555;
+  font-size: 17px;
+}
+
+.barcode{
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  height: 30px;
+  width: 90px;
+  background: #222;
+  box-shadow: inset 0 1px 0 #FFB300, inset -2px 0 0 #FFB300,
+    inset -4px 0 0 #222,
+    inset -5px 0 0 #FFB300,
+    inset -6px 0 0 #222,
+    inset -9px 0 0 #FFB300,
+    inset -12px 0 0 #222,
+    inset -13px 0 0 #FFB300,
+    inset -14px 0 0 #222,
+    inset -15px 0 0 #FFB300,
+    inset -16px 0 0 #222,
+    inset -17px 0 0 #FFB300,
+    inset -19px 0 0 #222,
+    inset -20px 0 0 #FFB300,
+    inset -23px 0 0 #222,
+    inset -25px 0 0 #FFB300,
+    inset -26px 0 0 #222,
+    inset -26px 0 0 #FFB300,
+    inset -27px 0 0 #222,
+    inset -30px 0 0 #FFB300,
+    inset -31px 0 0 #222,
+    inset -33px 0 0 #FFB300,
+    inset -35px 0 0 #222,
+    inset -37px 0 0 #FFB300,
+    inset -40px 0 0 #222,
+    inset -43px 0 0 #FFB300,
+    inset -44px 0 0 #222,
+    inset -45px 0 0 #FFB300,
+    inset -46px 0 0 #222,
+    inset -48px 0 0 #FFB300,
+    inset -49px 0 0 #222,
+    inset -50px 0 0 #FFB300,
+    inset -52px 0 0 #222,
+    inset -54px 0 0 #FFB300,
+    inset -55px 0 0 #222,
+    inset -57px 0 0 #FFB300,
+    inset -59px 0 0 #222,
+    inset -61px 0 0 #FFB300,
+    inset -64px 0 0 #222,
+    inset -66px 0 0 #FFB300,
+    inset -67px 0 0 #222,
+    inset -68px 0 0 #FFB300,
+    inset -69px 0 0 #222,
+    inset -71px 0 0 #FFB300,
+    inset -72px 0 0 #222,
+    inset -73px 0 0 #FFB300,
+    inset -75px 0 0 #222,
+    inset -77px 0 0 #FFB300,
+    inset -80px 0 0 #222,
+    inset -82px 0 0 #FFB300,
+    inset -83px 0 0 #222,
+    inset -84px 0 0 #FFB300,
+    inset -86px 0 0 #222,
+    inset -88px 0 0 #FFB300,
+    inset -89px 0 0 #222,
+    inset -90px 0 0 #FFB300;
+}
+
+.slip{
+  left: 455px;
+}
+
+.nameslip{
+  top: 60px;
+  left: 410px;
+}
+
+.flightslip{
+  left: 410px;
+}
+
+.seatslip{
+  left: 540px;
+}
+
+.jfkslip{
+  font-size: 30px;
+  top: 20px;
+  left: 410px;
+}
+
+.sfoslip{
+  font-size: 30px;
+  top: 20px;
+  left: 530px;
+}
+
+.planeslip{
+  top: 10px;
+  left: 480px;
+}
+
+.airlineslip{
+  left: 455px;
+}
+
+
+
+
+
+
+.download-button {
+    background-color: #01a307;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 700px;
+    margin-top: 310px;
+    transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+    background-color: #45a049;
+}
+
+
+ 
+    </style>
+     
+</head>
+<body>
+
+
+ <div class="loader" id="loader"> <p>loading.....</p></div>
+
+<div class="ticket-container" id="ticket">
+
+<div>
+<h1>BOOKING SUCCESSFUL!</h1>
+ 
+    </div>
+    
+   <div class="and" id="downt">
+   
+
+   <div class="box"  id="download">
+   
+   
+   
+   
+
+   
+  <ul class="left">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  
+  <ul class="right">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  
+  
+
+
+  
+  <div class="ticket"  id ="down">
+    <span class="airline">Lufthansa</span>
+    <span class="airline airlineslip">Lufthansa</span>
+    <span class="boarding">Boarding pass</span>
+    <div class="content">
+      <span class="jfk">MUM</span>
+      <span class="plane"><?xml version="1.0" ?><svg clip-rule="evenodd" fill-rule="evenodd" height="60" width="60" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><g stroke="#222"><line fill="none" stroke-linecap="round" stroke-width="30" x1="300" x2="55" y1="390" y2="390"/><path d="M98 325c-9 10 10 16 25 6l311-156c24-17 35-25 42-50 2-15-46-11-78-7-15 1-34 10-42 16l-56 35 1-1-169-31c-14-3-24-5-37-1-10 5-18 10-27 18l122 72c4 3 5 7 1 9l-44 27-75-15c-10-2-18-4-28 0-8 4-14 9-20 15l74 63z" fill="#222" stroke-linejoin="round" stroke-width="10"/></g></svg></span>
+      <span class="sfo">HYD</span>
+      
+      <span class="jfk jfkslip">Mum</span>
+      <span class="plane planeslip"><?xml version="1.0" ?><svg clip-rule="evenodd" fill-rule="evenodd" height="50" width="50" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><g stroke="#222"><line fill="none" stroke-linecap="round" stroke-width="30" x1="300" x2="55" y1="390" y2="390"/><path d="M98 325c-9 10 10 16 25 6l311-156c24-17 35-25 42-50 2-15-46-11-78-7-15 1-34 10-42 16l-56 35 1-1-169-31c-14-3-24-5-37-1-10 5-18 10-27 18l122 72c4 3 5 7 1 9l-44 27-75-15c-10-2-18-4-28 0-8 4-14 9-20 15l74 63z" fill="#222" stroke-linejoin="round" stroke-width="10"/></g></svg></span>
+      <span class="sfo sfoslip">Hyd</span>
+      <div class="sub-content">
+        <span class="watermark">Hyd1</span>
+        <div id="passengerNameDisplay"   style="
+    display: none;"></div>
+        
+  
+          <span class="name">PASSENGER NAME<br><span id="passengerName"></span></span>
+          
+        <span class="flight">FLIGHT N&deg;<br><span>X3-65C3</span></span>
+        <span class="gate">GATE<br><span>11B</span></span>
+        <span class="seat">SEAT<br><span>45A</span></span>
+        <span class="boardingtime">BOARDING TIME<br><span>8:25PM ON 20 AUGUST 2023</span></span>
+            
+         <span class="flight flightslip">FLIGHT N&deg;<br><span>X3-65C3</span></span>
+          <span class="seat seatslip">SEAT<br><span>17W</span></span>
+          <span class="name nameslip">PASSENGER NAME<br><span id="passengerNameSlip"></span></span>
+      
+         
+         
+      </div>
+      
+    </div>
+    <div class="barcode"></div>
+    <div class="barcode slip"></div>
+    
+     
+  </div>
+
+ 
+</div>
+
+</div>
+
+
+<button id="downloadBtn" class="download-button">Download Ticket</button>
+
+
+
+
+ <div class="rating" id="rating">
+        <span class="star" onclick="rate(1)">&#9733;</span>
+        <span class="star" onclick="rate(2)">&#9733;</span>
+        <span class="star" onclick="rate(3)">&#9733;</span>
+        <span class="star" onclick="rate(4)">&#9733;</span>
+        <span class="star" onclick="rate(5)">&#9733;</span>
+    </div>
+
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+
+<script>
+
+
+//Function to capture and download the ticket
+document.addEventListener("DOMContentLoaded", function() {
+    // Function to capture and download the ticket
+    function downloadTicket() {
+        const ticketContainer = document.getElementById("down");
+
+        // Use html2canvas to capture the ticket container as an image
+        html2canvas(ticketContainer).then(function(canvas) {
+            // Convert the canvas to a data URL
+            const imgData = canvas.toDataURL("image/png");
+
+            // Create a temporary link to trigger the download
+            const link = document.createElement("a");
+            link.download = "flight_ticket.png";
+            link.href = imgData;
+            link.click();
+        });
+    }
+
+    // Attach the download function to the button click event
+    const downloadBtn = document.getElementById("downloadBtn");
+    downloadBtn.addEventListener("click", downloadTicket);
+});
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Retrieve the query parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const passengerName = urlParams.get('passengerName');
+
+    // Update the content of the passengerNameDisplay element
+    const passengerNameDisplay = document.getElementById('passengerNameDisplay');
+    passengerNameDisplay.textContent = decodeURIComponent(passengerName);
+
+    // Update the passenger name in the boarding pass slip
+    const passengerNameSlip = document.getElementById('passengerName');
+    passengerNameSlip.textContent = decodeURIComponent(passengerName);
+
+    // Update the passenger name in the small boarding pass slip
+    const passengerNameSmallSlip = document.querySelector('.nameslip span');
+    passengerNameSmallSlip.textContent = decodeURIComponent(passengerName);
+});
+
+function showTicket() {
+    const loader = document.getElementById('loader');
+    const ticketContainer = document.getElementById('ticket');
+
+    // Hide the loader
+    loader.style.display = 'none';
+
+    // Show the ticket content
+    ticketContainer.style.display = 'block';
+}
+
+// Simulate a delay to show the loading animation
+setTimeout(showTicket, 2000);
+
+// Function to handle the rating
+function rate(stars) {
+    // Display the number of stars selected (you can use this value to send to the server if needed)
+    alert(`You rated ${stars} stars!`);
+
+    // Optionally, you can also update the style of the rating stars to reflect the selected rating
+    const ratingDiv = document.getElementById('rating');
+    const starsArray = ratingDiv.querySelectorAll('.star');
+    for (let i = 0; i < starsArray.length; i++) {
+        if (i < stars) {
+            starsArray[i].classList.add('selected');
+        } else {
+            starsArray[i].classList.remove('selected');
+        }
+    }
+}
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
+

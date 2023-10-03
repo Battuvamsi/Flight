@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   
+
+    <style>
+    
+     body {
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px 0;
+            color: #17a2b8;;
+            text-shadow: 2px 2px #ccc;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        label {
+            color: #007bff;
+        }
+
+        input {
+            border: 1px solid #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+        }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px 0;
+            color: #17a2b8;;
+            text-shadow: 2px 2px #ccc;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #0056b333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        .seats-layout {
+            display: grid;
+            grid-template-columns: repeat(1, 130px) repeat(2, 70px);
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .seat {
+        top:370px;
+            width: 60px;
+            height: 70px;
+            background-color: rgba(0,123,255,.25);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            position: relative;
+                align-content: center;
+           flex-wrap: wrap;
+           flex-direction: column;
+        }
+
+        .seat.selected {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .seat:not(.occupied):hover {
+            background-color: #c0c0c0;
+        }
+
+        .seat.occupied {
+            background-color: #7d79d9;
+            cursor: not-allowed;
+        }
+
+        .seat-label {
+            font-size: 12px;
+        }
+
+        .seat-blob {
+          
+            border-radius: 50%;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            transform: scale(0);
+            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        }
+
+        .seat.selected .seat-blob {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .seat.selected .seat-label {
+            display: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+        }
+        
+        
+        
+        
+     
+         .seats-layout-container {
+            position: relative;
+            background-image: url('/image/plane1.png'); /* Replace with the path to your flight image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 1750px;
+           
+             /* Add some padding to center the seat layout within the container */
+        }
+        
+
+    </style>
+</head>
+<body>
+    <h1>Details Filling Page</h1>
+ 
+   
+   
+   
+   
+   
+    <div class="container">
+     
+        <!-- Display the flight details obtained from URL query parameters -->
+        <div class="form-group">
+            <label>Flight Name:</label>
+            <span id="flightName"></span>
+        </div>
+        <div class="form-group">
+            <label>Flight ID:</label>
+            <span id="flightId"></span>
+        </div>
+       <form id="userDetailsForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required class="form-control">
+            </div>
+
+           <div class="form-group">
+    <label for="genderSelect">Gender:</label>
+    <select id="genderSelect" name="gender" class="form-control" required onchange="handleGenderSelect()">
+   
+
+        <option value="" disabled selected>Select your gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Non-binary">Non-binary</option>
+        <option value="Transgender">Transgender</option>
+        <option value="Plant">Plant</option>
+        <option value="Genderqueer">Genderqueer</option>
+        <option value="Genderfluid">Genderfluid</option>
+        <option value="Agender">Agender</option>
+        <option value="Bigender">Bigender</option>
+        <option value="Two-Spirit">Two-Spirit</option>
+        <option value="Androgynous">Androgynous</option>
+        <option value="Demigender">Demigender</option>
+        <option value="Neutrois">Neutrois</option>
+        <option value="Pangender">Pangender</option>
+        <option value="Third Gender">Third Gender</option>
+        <option value="Gender Questioning">Gender Questioning</option>
+        <option value="Cisgender">Cisgender</option>
+        <option value="Transmasculine">Transmasculine</option>
+        <option value="Transfeminine">Transfeminine</option>
+        <option value="Two-Spirit">Two-Spirit</option>
+        <option value="Neutrois">Neutrois</option>
+        <option value="Agender">Agender</option>
+        <option value="Bi-Gender">Bi-Gender</option>
+        <option value="Nongender">Nongender</option>
+        <option value="Null-Gender">Null-Gender</option>
+        <option value="Androgyne">Androgyne</option>
+        <option value="Fluid">Fluid</option>
+        <option value="Intersex">Intersex</option>
+        <option value="Polygender">Polygender</option>
+        <option value="Queer">Queer</option>
+        <option value="Other">Other</option>
+        <option value="Prefer not to say">Prefer not to say</option>
+    </select>
+</div>
+
+  <div class="form-group" id="otherGenderInput" style="display: none;">
+        <label for="otherGender">Other Gender:</label>
+        <input type="text" id="otherGender" name="otherGender" class="form-control">
+    </div>
+
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" required class="form-control">
+            </div>
+                <div class="form-group">
+     
+    </div>
+            
+             <br>
+             <br>
+            
+             <h2>Seat Selection</h2>
+             <br>
+             <br>
+
+
+<div class="seats-layout-container">
+             
+           <br>
+             <br>
+        
+            <div class="seats-layout">
+                <!-- Seat selection layout - Replace the below seats with actual seat data -->
+                <!-- First row -->
+                <div class="seat">1<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">2<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                <div class="seat occupied">3<span class="seat-label">Occupied</span></div>
+                <div class="seat">4<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">5<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+
+                <!-- Second row -->
+                <div class="seat">6<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">7<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">8<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                <div class="seat">9<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">10<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                
+                <div class="seat">11<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                <div class="seat">12<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <br>
+                <br>
+                <br>
+                
+                <div class="seat occupied">13<span class="seat-label">Occupied</span></div>
+                <div class="seat">14<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">15<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                
+                
+                <div class="seat">16<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                <div class="seat">17<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat occupied">18<span class="seat-label">Occupied</span></div>
+                <div class="seat">19<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                <div class="seat">20<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                
+                <div class="seat">21<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">22<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                <div class="seat occupied">23<span class="seat-label">Occupied</span></div>
+                <div class="seat">24<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">25<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                
+                <div class="seat">26<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">27<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat occupied">28<span class="seat-label">Occupied</span></div>
+                <div class="seat">29<span class="seat-label">Window</span><div class="seat-blob"></div></div>
+                <div class="seat">30<span class="seat-label">Aisle</span><div class="seat-blob"></div></div>
+                
+                
+                
+
+                <!-- Add more rows as needed -->
+            </div>
+            
+            </div>
+          
+      
+      
+      
+                  <br>
+
+
+            <button type="button" onclick="proceedToPayment()" class="btn btn-primary">Proceed to Payment</button>
+        </form>
+    </div>
+
+    <script>
+    
+    
+    
+    
+    function handleGenderSelect() {
+        const genderSelect = document.getElementById('genderSelect');
+        const otherGenderInput = document.getElementById('otherGenderInput');
+        const otherGenderField = document.getElementById('otherGender');
+
+        if (genderSelect.value === 'Other') {
+            otherGenderInput.style.display = 'block';
+            otherGenderField.required = true;
+        } else {
+            otherGenderInput.style.display = 'none';
+            otherGenderField.required = false;
+        }
+    }
+
+    
+    
+    
+ 
+    
+    
+        // Read the flight details from the URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const flightId = urlParams.get('flightId');
+        const flightName = decodeURIComponent(urlParams.get('flightName'));
+        
+        // Add more variables for other flight details if needed
+
+        // Display the flight details on the page
+        document.getElementById('flightId').textContent = flightId;
+        document.getElementById('flightName').textContent = flightName;
+        
+        
+        // Event listener for seat selection
+        const seats = document.querySelectorAll('.seat:not(.occupied)');
+        seats.forEach(seat => {
+            seat.addEventListener('click', () => {
+                if (!seat.classList.contains('selected')) {
+                    seat.classList.add('selected');
+                } else {
+                    seat.classList.remove('selected');
+                }
+            });
+        });
+    
+
+        function proceedToPayment() {
+            // Collect user details from the form
+            const userDetails = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('genderSelect').value,
+                otherGender: document.getElementById('otherGender').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                // Add more fields as needed
+            };
+            
+            const selectedSeats = document.querySelectorAll('.seat.selected');
+            const seatNumbers = Array.from(selectedSeats).map(seat => seat.textContent);
+
+            // Save selected seat details to local storage
+            localStorage.setItem('selectedSeats', JSON.stringify(seatNumbers));
+
+            // Save the user details to local storage for future use
+            localStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+            // Redirect to the payment page
+            const passengerName = encodeURIComponent(userDetails.name);
+            window.location.href = '/payment?flightId=' + flightId + '&passengerName=' + passengerName;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const submitFormButton = document.getElementById("submitForm");
+
+            submitFormButton.addEventListener("click", function(event) {
+              event.preventDefault();
+
+              // Get the form data
+              const formData = new FormData(document.getElementById("userDetailsForm"));
+
+              // Extract the passenger's name and flight number
+              const passengerName = formData.get("name");
+              const flightNumber = formData.get("flightId");
+
+              // Build the URL with query parameters
+              const boardingPassURL = `boardingpass.html?name=${encodeURIComponent(passengerName)}&flightNumber=${encodeURIComponent(flightNumber)}`;
+
+              // Redirect to the boarding pass page
+              window.location.href = boardingPassURL;
+            });
+          });
+
+    </script>
+
+    <!-- Add Bootstrap JS and jQuery if needed -->
+    <!-- These scripts are not required for the design, but you might need them for other functionalities -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+</body>
+</html>
+

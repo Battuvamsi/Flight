@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Flight - Admin Dashboard</title>
+     <link rel="website icon" type=
+    "png" href="https://th.bing.com/th/id/OIP.XNl__t4pbd-z1mdVzyXvQAHaGl?w=179&h=180&c=7&r=0&o=5&pid=1.7">
+    
+    
+    <!-- CSRF token element -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <!-- CSS Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://cdn.pixabay.com/photo/2017/11/05/21/45/balloon-2921973_640.jpg');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            background-color: #b4cee6ad;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2 {
+            margin-bottom: 10px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #e69e3e;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav h1 {
+            color: #fff;
+            font-size: 24px;
+            margin: 0;
+            padding: 5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #ebb20e;
+        }
+
+        /* Form Styles */
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+             background-color: #9199a0ab;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        form h2 {
+            margin-bottom: 20px;
+            color: #ffa226;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #1f1e1b;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="date"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #ffa226;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        form button:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        form button:hover {
+            background-color: #e2ae6a;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            color: #333;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f7b836;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        td button {
+            padding: 5px 10px;
+            background-color: #e58e35a6;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        td button:not(:last-child) {
+            margin-right: 5px;
+        }
+
+        td button:hover {
+            background-color: #e43210a6;
+        }
+
+        /* Update Form Container */
+        
+         /* Additional styles for the specific update form container */
+        #updateFormWrapper.update-form-container {
+            display: none;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .update-form-container {
+            display: none;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .update-form-container.show-update-form {
+            display: block;
+        }
+        
+        
+   
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>Admin Dashboard</h1>
+        <ul>
+            <li><a href="#" onclick="showAddFlight()">Home</a></li>
+            <li><a href="#" onclick="showFlights()">Flights</a></li>
+            <li><a href="#" onclick="showCustomers()">Users</a></li>
+           <li><a href="/logout">Logout</a></li> 
+        </ul>
+    </nav>
+
+    <form id="addFlightForm">
+        <!-- CSRF token hidden input -->
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+        <h2>Add Flight</h2>
+        <label for="flight_id">Flight ID:</label>
+        <input type="number" id="flight_id" name="flight_id" required>
+
+        <label for="flight_name">Flight Name:</label>
+        <input type="text" id="flight_name" name="flight_name" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="flight_source">Source:</label>
+        <input type="text" id="flight_source" name="flight_source" required>
+
+        <label for="flight_destination">Destination:</label>
+        <input type="text" id="flight_destination" name="flight_destination" required>
+
+        <label for="flight_price">Price:</label>
+        <input type="number" id="flight_price" name="flight_price" step="0.01" required>
+
+        <label for="flight_duration">Duration (hours):</label>
+        <input type="number" id="flight_duration" name="flight_duration" step="0.01" required>
+
+        <label for="flight_capacity">Capacity:</label>
+        <input type="number" id="flight_capacity" name="flight_capacity" required>
+
+        <button type="submit">Add Flight</button>
+    </form>
+
+    
+    
+    
+  
+<div id="customersSection" style="display: none;">
+    <h2>All Customers</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody id="customerTableBody">
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+    <div class="update-form-container" id="updateFlightFormContainer" >
+        <h2>Update Flight</h2>
+        <form id="updateFlightForm">
+            <!-- CSRF token hidden input -->
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+            <label for="update_flight_id">Flight ID:</label>
+            <input type="number" id="update_flight_id" name="flight_id" required>
+
+            <label for="update_flight_name">Flight Name:</label>
+            <input type="text" id="update_flight_name" name="flight_name" required>
+
+            <label for="update_date">Date:</label>
+            <input type="date" id="update_date" name="date" required>
+
+            <label for="update_flight_source">Source:</label>
+            <input type="text" id="update_flight_source" name="flight_source" required>
+
+            <label for="update_flight_destination">Destination:</label>
+            <input type="text" id="update_flight_destination" name="flight_destination" required>
+
+            <label for="update_flight_price">Price:</label>
+            <input type="number" id="update_flight_price" name="flight_price" step="0.01" required>
+
+            <label for="update_flight_duration">Duration (hours):</label>
+            <input type="number" id="update_flight_duration" name="flight_duration" step="0.01" required>
+
+            <label for="update_flight_capacity">Capacity:</label>
+            <input type="number" id="update_flight_capacity" name="flight_capacity" required>
+
+            <button type="submit">Update Flight</button>
+            <button type="button" onclick="cancelUpdate()">Cancel</button>
+        </form>
+    </div>
+
+    <div id="flightsSection" style="display: none;">
+        <h2>All Flights</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Flight ID</th>
+                    <th>Flight Name</th>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Price</th>
+                    <th>Duration (hours)</th>
+                    <th>Capacity</th>
+                    <th   style="
+    padding-left: 200px;
+                    ">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="flightTableBody">
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <script>
+    
+    
+    
+
+
+    function hideAllSections() {
+        document.getElementById('flightsSection').style.display = 'none';
+        document.getElementById('addFlightForm').style.display = 'none';
+       // document.getElementById('updateFlightFormContainer').style.display = 'none';
+        document.getElementById('customersSection').style.display = 'none';
+    }
+
+    function showAddFlight() {
+        // Show the "Add Flight" form and hide other sections
+        hideAllSections();
+        document.getElementById('addFlightForm').style.display = 'block';
+    }
+
+    function showFlights() {
+        // Fetch all flights and display the "Flights" section while hiding other sections
+        fetchAllFlights();
+        hideAllSections();
+        document.getElementById('flightsSection').style.display = 'block';
+    }
+
+    function showCustomers() {
+        // Fetch all customers and display the "Customers" section while hiding other sections
+        fetchAllCustomers();
+        hideAllSections();
+        document.getElementById('customersSection').style.display = 'block';
+    }
+
+    
+    
+    
+   // function showAddFlight() {
+        // Show the "Add Flight" form and hide other sections
+  //      document.getElementById('addFlightForm').style.display = 'block';
+  //      document.getElementById('updateFlightFormContainer').style.display = 'none';
+  //      document.getElementById('flightsSection').style.display = 'none';
+  //  }
+    
+    
+    
+    
+    
+    
+    
+    
+        document.getElementById('addFlightForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            const flight = {
+                flight_id: parseInt(formData.get('flight_id')),
+                flight_name: formData.get('flight_name'),
+                date: formData.get('date'),
+                flight_source: formData.get('flight_source'),
+                flight_destination: formData.get('flight_destination'),
+                flight_price: parseFloat(formData.get('flight_price')),
+                flight_duration: parseFloat(formData.get('flight_duration')),
+                flight_capacity: parseInt(formData.get('flight_capacity'))
+            };
+
+            // Submit the flight data to the backend using fetch or other methods here
+            // Example using fetch:
+            fetch('/v1/flight', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': formData.get('_csrf') // Pass the CSRF token as a header
+                },
+                body: JSON.stringify(flight)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Flight added successfully!');
+                    // You can redirect to another page or update the UI as needed
+                    fetchAllFlights(); // Fetch and update the flight table again
+                } else {
+                    alert('Error adding flight. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+        function fetchAllFlights() {
+            fetch('/v1/user') // Replace with your backend API endpoint for getting all flights
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data); // Add this line to log the fetched data
+                const flightTableBody = document.getElementById('flightTableBody');
+                flightTableBody.innerHTML = '';
+
+                data.forEach(flight => {
+                    // Convert the date array to a formatted date string (YYYY-MM-DD)
+                    const date = new Date(flight.date[0], flight.date[1] - 1, flight.date[2]).toISOString().slice(0, 10);
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${flight.flight_id}</td>
+                        <td>${flight.flight_name}</td>
+                        <td>${date}</td>
+                        <td>${flight.flight_source}</td>
+                        <td>${flight.flight_destination}</td>
+                        <td>${flight.flight_price}</td>
+                        <td>${flight.flight_duration}</td>
+                        <td>${flight.flight_capacity}</td>
+                        <td>
+                            <button onclick="showUpdateForm(${flight.flight_id}, '${flight.flight_name}', '${date}', '${flight.flight_source}', '${flight.flight_destination}', ${flight.flight_price}, ${flight.flight_duration}, ${flight.flight_capacity})">Update</button>
+                            <button onclick="deleteFlight(${flight.flight_id})">Delete</button>
+                        </td>
+                    `;
+                    flightTableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching flights. Please try again.');
+            });
+        }
+
+
+
+        // Call the function to fetch and update the flight table on page load
+      //  fetchAllFlights();
+        
+      
+
+        function showUpdateForm(flight_id, flight_name, date, flight_source, flight_destination, flight_price, flight_duration, flight_capacity) {
+            // Populate the update form with the flight details
+            console.log('showUpdateForm() called');
+            document.getElementById('update_flight_id').value = flight_id;
+            document.getElementById('update_flight_name').value = flight_name;
+            document.getElementById('update_date').value = date;
+            document.getElementById('update_flight_source').value = flight_source;
+            document.getElementById('update_flight_destination').value = flight_destination;
+            document.getElementById('update_flight_price').value = flight_price;
+            document.getElementById('update_flight_duration').value = flight_duration;
+            document.getElementById('update_flight_capacity').value = flight_capacity;
+
+            // Show the update form container and hide the table row
+            document.getElementById('updateFlightFormContainer').classList.add('show-update-form');
+            document.getElementById('flightTableBody').style.display = 'none';
+        }
+
+        function cancelUpdate() {
+            // Clear the form and hide the update form container
+            document.getElementById('updateFlightForm').reset();
+            document.getElementById('updateFlightFormContainer').classList.remove('show-update-form');
+            document.getElementById('flightTableBody').style.display = 'table-row-group';
+        }
+
+        document.getElementById('updateFlightForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            updateFlight();
+        });
+
+        function updateFlight() {
+            // Retrieve the flight details from the form inputs
+            const flight_id = parseInt(document.getElementById('update_flight_id').value);
+            const flight_name = document.getElementById('update_flight_name').value;
+            const date = document.getElementById('update_date').value;
+            const flight_source = document.getElementById('update_flight_source').value;
+            const flight_destination = document.getElementById('update_flight_destination').value;
+            const flight_price = parseFloat(document.getElementById('update_flight_price').value);
+            const flight_duration = parseFloat(document.getElementById('update_flight_duration').value);
+            const flight_capacity = parseInt(document.getElementById('update_flight_capacity').value);
+
+            const updatedFlight = {
+                flight_id: flight_id,
+                flight_name: flight_name,
+                date: date,
+                flight_source: flight_source,
+                flight_destination: flight_destination,
+                flight_price: flight_price,
+                flight_duration: flight_duration,
+                flight_capacity: flight_capacity
+            };
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+            // Submit the updated flight data to the backend using fetch or other methods here
+            // Example using fetch:
+            fetch(`/v1/update/${flight_id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // Include the CSRF token as a header
+                },
+                body: JSON.stringify(updatedFlight)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Flight updated successfully!');
+                    // Hide the update form and fetch and update the flight table again
+                    cancelUpdate();
+                    fetchAllFlights();
+                } else {
+                    alert('Error updating flight. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
+        function deleteFlight(flight_id) {
+            const confirmDelete = confirm('Are you sure you want to delete this flight?');
+            if (confirmDelete) {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+                fetch(`/v1/delete/${flight_id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken // Include the CSRF token in the request header
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Flight deleted successfully!');
+                        // After successful deletion, you can update the UI or refresh the flight list
+                        // You can call fetchAllFlights() to fetch and update the table again
+                        fetchAllFlights();
+                    } else {
+                        alert('Error deleting flight. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        }
+        
+        
+
+        
+        function fetchAllCustomers() {
+            fetch('/v1/customers') // Replace with your backend API endpoint for getting all customers
+            .then(response => response.json())
+            .then(data => {
+                const customerTableBody = document.getElementById('customerTableBody');
+                customerTableBody.innerHTML = '';
+
+                data.forEach(customer => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${customer.customer_id}</td>
+                        <td>${customer.customer_name}</td>
+                        <td>${customer.username}</td>
+                        <td>${customer.customer_email}</td>
+                        <td>${customer.customer_phone}</td>
+                    `;
+                    customerTableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching customers. Please try again.');
+            });
+        }
+
+        // Call the function to fetch and populate the customer table on page load
+        //fetchAllCustomers();
+        
+        
+        
+        function logout() {
+            // Fetch the logout endpoint on the backend
+            fetch('/logout', {
+                method: 'GET', // Use GET since we're accessing the logout endpoint
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content // Include the CSRF token as a header
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Logout successful, redirect to the login page
+                    window.location.href = '/login'; // Redirect to the login page using Thymeleaf URL expression
+                } else {
+                    alert('Error logging out. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while logging out. Please try again.');
+            });
+        }
+        
+        
+        document.querySelector('nav ul li:nth-child(1) a').addEventListener('click', showAddFlight);
+        document.querySelector('nav ul li:nth-child(2) a').addEventListener('click', showFlights);
+        document.querySelector('nav ul li:nth-child(3) a').addEventListener('click', showCustomers);
+
+        // Call the function to fetch and update the flight table on page load
+        fetchAllFlights();
+
+        // Call the function to fetch and populate the customer table on page load
+        fetchAllCustomers();
+
+    </script>
+</body>
+</html>
+
+

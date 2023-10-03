@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+              xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to your dashboard!</h1>
+    <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+        <!-- Show admin-specific content here -->
+        <p>Hello Admin! You have access to admin features.</p>
+    </div>
+    <div th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
+        <!-- Show customer-specific content here -->
+        <p>Hello Customer! You have access to customer features.</p>
+    </div>
+    <div th:unless="${#authorization.expression('hasAnyRole(''ADMIN'', ''CUSTOMER'')}">
+        <!-- Show generic content for users with unknown roles -->
+        <p>Unknown role or error occurred.</p>
+    </div>
+</body>
+</html>
+
+
