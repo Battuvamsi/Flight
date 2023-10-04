@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @SpringBootApplication
-@EnableWebMvc
 public class FlightManagementSystem1Application {
 
 	public static void main(String[] args) {

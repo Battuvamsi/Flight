@@ -36,10 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new UserinfoUserDeatailsService();
 	}
 
-    @Bean
-   public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
 	}
+
 	
 	@Bean
 	public AuthenticationProvider authenticatonProvider() {
