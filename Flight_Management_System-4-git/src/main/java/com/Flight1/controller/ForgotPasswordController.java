@@ -46,7 +46,7 @@ public class ForgotPasswordController {
 
     private void sendResetEmail(Customer customer) {
         String resetToken = customer.getResetToken();
-        String resetLink = "http://localhost:1045/reset-password?token=" + resetToken; // Replace with actual URL
+        String resetLink = "flight-production-d40c.up.railway.app/reset-password?token=" + resetToken; // Replace with actual URL
         String subject = "Password Reset Instructions";
         String text = "To reset your password, click the following link:\n" + resetLink;
         emailService.sendEmail(customer.getCustomer_email(), subject, text);
