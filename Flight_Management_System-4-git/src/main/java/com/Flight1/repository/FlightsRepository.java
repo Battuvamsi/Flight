@@ -1,12 +1,14 @@
 package com.Flight1.repository;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
-import com.Flight1.model.Flights;
-
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.Flight1.model.Flights;
+
+@Repository
 public interface FlightsRepository extends JpaRepository<Flights, Integer> {
 	// List<Flights> findByFlight_sourceAndFlight_destinationAndDate(String flight_source, String flight_destination, LocalDate date);
 	 
