@@ -90,7 +90,18 @@ public class FlightServiceimp implements FlightService {
 	 
 	 
 	 public List<Flights> searchFlights(String flightSource, String flightDestination, LocalDate date) {
-	        return flightrep.findFlightsBySourceDestinationAndDate(flightSource, flightDestination, date);
-	    }
+		    // Log the received parameters for debugging
+		    System.out.println("Received parameters - source: " + flightSource + ", destination: " + flightDestination + ", date: " + date);
+
+		    // Log the SQL query
+		    List<Flights> flights = flightrep.findFlightsBySourceDestinationAndDate(flightSource, flightDestination, date);
+		    System.out.println("SQL Query: " + ((org.hibernate.query.Query<?>) flights).getQueryString());
+
+		    return flights;
+		}
+
+	 
+	 
+
 
 }

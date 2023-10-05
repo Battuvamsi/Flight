@@ -276,8 +276,11 @@
             <label for="update_flight_name">Flight Name:</label>
             <input type="text" id="update_flight_name" name="flight_name" required>
 
+            
+            
             <label for="update_date">Date:</label>
             <input type="date" id="update_date" name="date" required>
+
 
             <label for="update_flight_source">Source:</label>
             <input type="text" id="update_flight_source" name="flight_source" required>
@@ -414,46 +417,59 @@
                 alert('An error occurred. Please try again.');
             });
         });
-        function fetchAllFlights() {
-            fetch('/v1/user') // Replace with your backend API endpoint for getting all flights
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data); // Add this line to log the fetched data
-                const flightTableBody = document.getElementById('flightTableBody');
-                flightTableBody.innerHTML = '';
+       // ...
+       
+       
+       
 
-                data.forEach(flight => {
-                    // Convert the date array to a formatted date string (YYYY-MM-DD)
-                    const date = new Date(flight.date[0], flight.date[1] - 1, flight.date[2]).toISOString().slice(0, 10);
+// ...
 
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${flight.flight_id}</td>
-                        <td>${flight.flight_name}</td>
-                        <td>${date}</td>
-                        <td>${flight.flight_source}</td>
-                        <td>${flight.flight_destination}</td>
-                        <td>${flight.flight_price}</td>
-                        <td>${flight.flight_duration}</td>
-                        <td>${flight.flight_capacity}</td>
-                        <td>
-                            <button onclick="showUpdateForm(${flight.flight_id}, '${flight.flight_name}', '${date}', '${flight.flight_source}', '${flight.flight_destination}', ${flight.flight_price}, ${flight.flight_duration}, ${flight.flight_capacity})">Update</button>
-                            <button onclick="deleteFlight(${flight.flight_id})">Delete</button>
-                        </td>
-                    `;
-                    flightTableBody.appendChild(row);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while fetching flights. Please try again.');
-            });
+function fetchAllFlights() {
+    fetch('/v1/user') // Replace with your backend API endpoint for getting all flights
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data); // Add this line to log the fetched data
+        const flightTableBody = document.getElementById('flightTableBody');
+        flightTableBody.innerHTML = '';
+
+        data.forEach(flight => {
+            // Parse the date string from the database (YYYY-MM-DD)
+            const dateParts = flight.date.split('-');
+            const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // DD-MM-YYYY
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${flight.flight_id}</td>
+                <td>${flight.flight_name}</td>
+                <td>${formattedDate}</td> 
+                <td>${flight.flight_source}</td>
+                <td>${flight.flight_destination}</td>
+                <td>${flight.flight_price}</td>
+                <td>${flight.flight_duration}</td>
+                <td>${flight.flight_capacity}</td>
+                <td>
+                    <button onclick="showUpdateForm(${flight.flight_id}, '${flight.flight_name}', '${formattedDate}', '${flight.flight_source}', '${flight.flight_destination}', ${flight.flight_price}, ${flight.flight_duration}, ${flight.flight_capacity})">Update</button>
+                    <button onclick="deleteFlight(${flight.flight_id})">Delete</button>
+                </td>
+            `;
+            flightTableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while fetching flights. Please try again.');
+    });
+}
+
+// ...
+
+
+// ...
 
 
 
@@ -461,23 +477,26 @@
       //  fetchAllFlights();
         
       
+function showUpdateForm(flight_id, flight_name, date, flight_source, flight_destination, flight_price, flight_duration, flight_capacity) {
+    // Populate the update form with the flight details
+    console.log('showUpdateForm() called');
+    document.getElementById('update_flight_id').value = flight_id;
+    document.getElementById('update_flight_name').value = flight_name;
 
-        function showUpdateForm(flight_id, flight_name, date, flight_source, flight_destination, flight_price, flight_duration, flight_capacity) {
-            // Populate the update form with the flight details
-            console.log('showUpdateForm() called');
-            document.getElementById('update_flight_id').value = flight_id;
-            document.getElementById('update_flight_name').value = flight_name;
-            document.getElementById('update_date').value = date;
-            document.getElementById('update_flight_source').value = flight_source;
-            document.getElementById('update_flight_destination').value = flight_destination;
-            document.getElementById('update_flight_price').value = flight_price;
-            document.getElementById('update_flight_duration').value = flight_duration;
-            document.getElementById('update_flight_capacity').value = flight_capacity;
+    // Set the date directly as it's of type "date"
+    document.getElementById('update_date').value = date;
 
-            // Show the update form container and hide the table row
-            document.getElementById('updateFlightFormContainer').classList.add('show-update-form');
-            document.getElementById('flightTableBody').style.display = 'none';
-        }
+    document.getElementById('update_flight_source').value = flight_source;
+    document.getElementById('update_flight_destination').value = flight_destination;
+    document.getElementById('update_flight_price').value = flight_price;
+    document.getElementById('update_flight_duration').value = flight_duration;
+    document.getElementById('update_flight_capacity').value = flight_capacity;
+
+    // Show the update form container and hide the table row
+    document.getElementById('updateFlightFormContainer').classList.add('show-update-form');
+    document.getElementById('flightTableBody').style.display = 'none';
+}
+
 
         function cancelUpdate() {
             // Clear the form and hide the update form container

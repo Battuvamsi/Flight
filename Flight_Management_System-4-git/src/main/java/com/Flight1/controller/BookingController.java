@@ -83,12 +83,20 @@ public class BookingController {
 	    
 	    @GetMapping("/search")
 	    public ResponseEntity<List<Flights>> searchFlights(
-	            @RequestParam("source") String source,
-	            @RequestParam("destination") String destination,
-	            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+	        @RequestParam String source,
+	        @RequestParam String destination,
+	        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+) {
+	     
+
+	        // Log the received parameters for debugging
+	        System.out.println("Received parameters - source: " + source + ", destination: " + destination + ", date: " + date);
+
+	        // Your existing code to search for flights
 	        List<Flights> flights = flightService.searchFlights(source, destination, date);
 	        return ResponseEntity.ok(flights);
 	    }
+
 	    
 //	    @PostMapping("/book-flight")
 //	    public ResponseEntity<Booking> bookFlight(@RequestBody FlightBookinRequest bookingRequest) {

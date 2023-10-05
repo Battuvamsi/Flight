@@ -1209,8 +1209,10 @@ button:hover,
         </div>
 
         <div class="form-group">
-            <label for="date">Date:</label>
+            <label for="date">Date:</label>,             
             <input type="date" id="date" name="date" required>
+
+
 
             <button type="button" onclick="searchFlights()">Search Flights</button>
         </div>
@@ -1497,7 +1499,8 @@ button:hover,
 
 
 
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
   
     <script>
     
@@ -1786,52 +1789,82 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+function isValidDate(dateString) {
+    // Use moment.js to check if the date is valid in the specified format
+    return moment(dateString, "DD-MM-YYYY", true).isValid();
+}
 
+
+function formatDate(date) {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0'); // Add 1 to month because it's 0-based
+    const year = d.getFullYear().toString();
+    return `${day}-${month}-${year}`;
+}
     function searchFlights() {
-        // Get input values
-        const source = document.getElementById("source").value;
-        const destination = document.getElementById("destination").value;
-        const date = document.getElementById("date").value;
+    // Get input values
+    const source = document.getElementById("source").value;
+    const destination = document.getElementById("destination").value;
+    const dateInput = document.getElementById("date").value;
 
-        // Make the API call to search for flights
-        fetch(`/search?source=${source}&destination=${destination}&date=${date}`)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data (list of flights)
-                displayFlights(data);
-            })
-            .catch(error => {
-                console.error("Error fetching flights:", error);
-                alert("An error occurred while fetching flights. Please try again.");
-            });
+    // Parse the input date using JavaScript's Date object
+    const inputDate = new Date(dateInput);
+
+    // Check if the inputDate is a valid date object
+    if (isNaN(inputDate)) {
+        alert("Invalid date. Please enter a valid date.");
+        return;
     }
+
+    // Format the date to yyyy-MM-dd
+    const year = inputDate.getFullYear();
+    const month = (inputDate.getMonth() + 1).toString().padStart(2, '0'); // Add 1 to month because it's 0-based
+    const day = inputDate.getDate().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // Make the API call to search for flights with the formatted date
+    fetch(`/search?source=${source}&destination=${destination}&date=${formattedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response data (list of flights)
+            displayFlights(data);
+        })
+        .catch(error => {
+            console.error("Error fetching flights:", error);
+            alert("An error occurred while fetching flights. Please try again.");
+        });
+}
+
+
+
+
+
 
     function displayFlights(flights) {
-        const flightTableBody = document.getElementById("flightTableBody");
-        flightTableBody.innerHTML = ""; // Clear existing rows
+    const flightTableBody = document.getElementById("flightTableBody");
+    flightTableBody.innerHTML = ""; // Clear existing rows
 
-        // Check if there are any flights returned
-        if (flights.length === 0) {
+    if (!Array.isArray(flights) || flights.length === 0) {
+        const newRow = flightTableBody.insertRow();
+        const cell = newRow.insertCell();
+        cell.colSpan = 7;
+        cell.textContent = "No flights found for the selected criteria.";
+    } else {
+        flights.forEach(flight => {
             const newRow = flightTableBody.insertRow();
-            const cell = newRow.insertCell();
-            cell.colSpan = 7;
-            cell.textContent = "No flights found for the selected criteria.";
-        } else {
-            flights.forEach(flight => {
-                const newRow = flightTableBody.insertRow();
-                newRow.innerHTML = `
-                    <td>${flight.flight_id}</td>
-                    <td>${flight.flight_name}</td>
-                    <td>${flight.date}</td>
-                    <td>${flight.flight_source}</td>
-                    <td>${flight.flight_destination}</td>
-                    <td>${flight.flight_price} INR</td>
-                    <td><a class="book-button" href="/details-filling?flightId=${flight.flight_id}&flightName=${encodeURIComponent(flight.flight_name)}">Book Flight</a></td>
-                   
-                `;
-            });
-        }
+            newRow.innerHTML = `
+                <td>${flight.flight_id}</td>
+                <td>${flight.flight_name}</td>
+                <td>${flight.date}</td>
+                <td>${flight.flight_source}</td>
+                <td>${flight.flight_destination}</td>
+                <td>${flight.flight_price} INR</td>
+                <td><a class="book-button" href="/details-filling?flightId=${flight.flight_id}&flightName=${encodeURIComponent(flight.flight_name)}">Book Flight</a></td>
+            `;
+        });
     }
+}
 
     function bookFlight(flightId, customerId) {
     	 customerId = 2;
